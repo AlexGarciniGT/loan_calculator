@@ -1,0 +1,56 @@
+<div class="step-text">
+<h5 id="description">Description</h5>
+<p>Let's compute all the parameters of the loan. There are at least two kinds of loan: those with annuity payment and those with differentiated payment. In this stage, you are going to calculate only the former. <strong>Annuity </strong>type of payment consists in paying a fixed sum of money at specified intervals, for example, each month or each year. The <strong>annuity payment</strong> amount is precisely this fixed sum of money that you need to pay at regular intervals.</p>
+<p>Let's assume that annuity payments are made monthly. Thus, we can use the following formula to calculate the <strong>monthly payment</strong>:</p>
+<p style="text-align: center;"><span class="math-tex">\(A_{ordinary\_annuity} = P * \dfrac{i * (1+i)^n}{(1+i)^n-1}\)</span></p>
+<p>Where:</p>
+<p><span class="math-tex">\(A\)</span> = annuity payment;</p>
+<p><span class="math-tex">\(P\)</span> = loan principal;</p>
+<p><span class="math-tex">\(i\)</span> = nominal (monthly) interest rate. Usually, it is 1/12 of the annual interest rate and is a floating value, not a percentage. For example, if your annual interest rate = 12%, then i = 0.01;</p>
+<p><span class="math-tex">\(n\)</span> = number of payments. This is usually the number of months in which repayments will be made.</p>
+<p>So far, in this stage you are interested in four values: the number of monthly payments required to repay the loan, the monthly payment amount, the loan principal, and the loan interest. Each of these values can be calculated if others are known:</p>
+<p><strong>Loan principal:</strong></p>
+<p style="text-align: center;"><span class="math-tex">\(P = \dfrac{A}{\left( \dfrac{i * (1+i)^n}{(1+i)^n-1} \right)}\)</span></p>
+<p><strong>The number of payments:</strong></p>
+<p style="text-align: center;"><strong><span class="math-tex">\(n = \log_{1+i} \left( \dfrac{A}{A - i*P} \right)\)</span></strong></p>
+<p>As the number of input parameters increases from this stage onwards, it might be convenient to use command-line arguments to input all known values. The <code class="java">argparse</code> module can help you parse them. You can run your loan calculator via command line using arguments like this:</p>
+<pre><code class="language-no-highlight">python creditcalc.py --principal=1000000 --periods=60 --interest=10</code></pre>
+<p>The missing parameter is the one that needs to be calculated. As you can see above, only the values for principal, periods and interest are given. This means that the program should calculate the monthly payment amount, because it was not specified in arguments.</p>
+<p>Check the description and examples below for more details.</p>
+<h5 id="objectives">Objectives</h5>
+<p>In this stage, you should change the behavior of the calculator:</p>
+<ol>
+<li>First, you should parse the provided parameters to define, which ones are known and which one is missing.</li>
+<li>Compute the missing value using the formulas mentioned above. The calculator should be able to calculate the number of monthly payments, the monthly payment amount, and the loan principal.</li>
+<li>Finally, output the value users wanted to compute.</li>
+</ol>
+<p>The final version of your program is supposed to work from the command line and parse the following arguments:</p>
+<ul>
+<li><code class="java">--payment</code> is the payment amount. It can be calculated using the provided principal, interest, and number of months</li>
+<li><code class="java">--principal</code> You can get its value if you know the interest, annuity payment, and number of months.</li>
+<li><code class="java">--periods</code> denotes the number of months needed to repay the loan. It's calculated based on the interest, annuity payment, and principal.</li>
+<li><code class="java">--interest</code> is specified without a percent sign. Note that it can accept a floating-point value. Our loan calculator can't calculate the interest, so it must always be provided.
+	</li>
+</ul>
+<p>Please be careful converting "<strong>X months</strong>" to "<strong>Y years and Z months</strong>". Avoid writing "0 years and 11 months" (output "11 months" instead) and "1 years and 0 months" (output "1 year" instead).</p>
+<h5 id="examples">Examples</h5>
+<p>The greater-than symbol followed by a space (<code class="java">&gt; </code>) represents the user input. Note that this is not part of the input.</p>
+<p><strong>Example 1: </strong><em>calculating the number of monthly payments</em></p>
+<pre><code class="language-no-highlight">&gt; python creditcalc.py --principal=1000000 --payment=15000 --interest=10
+It will take 8 years and 2 months to repay this loan!</code></pre>
+<p>Let’s take a closer look at <strong>Example 1</strong>.</p>
+<p>You know the loan principal, the monthly payment (annuity payment), and the loan interest. You didn't provide the <code class="java">--periods</code> argument, so you want to calculate the number of monthly payments. What do you do?</p>
+<p>1) You need to know the nominal interest rate. It is calculated like this:</p>
+<p><span class="math-tex">\(i = \dfrac{10\%}{12 * 100\%} = 0.008333...\)</span></p>
+<p>2) Now you can calculate the number of months:</p>
+<p><span class="math-tex">\(n = \log_{1 + 0.008333...} \left( \dfrac{15000}{15000-0.008333... * 1000000} \right) = 97.71...\)</span></p>
+<p>3) You need an integer number, so let’s round it up. Notice that the user will pay the same amount every month for 97 months, and in the 98th month the user will pay<em> 0.71...</em> of the monthly payment. So, there are 98 months to pay.</p>
+<p><span class="math-tex">\(n = 98\)</span></p>
+<p>4) Finally, you need to convert “98 months” to “8 years and 2 months” so that it is more readable and understandable for the user.</p>
+<p><strong>Example 2: </strong><em>calculating the monthly payment (the annuity payment)</em></p>
+<pre><code class="language-no-highlight">&gt; python creditcalc.py --principal=1000000 --periods=60 --interest=10
+Your monthly payment = 21248!</code></pre>
+<p><strong>Example 3:</strong><em> calculating the loan principal</em></p>
+<pre><code class="language-no-highlight"> python creditcalc.py --payment=8721.8 --periods=120 --interest=5.6
+Your loan principal = 800000!</code></pre>
+</div>
